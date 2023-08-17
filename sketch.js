@@ -1,9 +1,15 @@
 let dino;
 let attacks = [];
 let ground;
-let dinoImg, longBoneImg, shortBoneImg, mediumBoneImg, groundImg, dino_deadImg;
-let papyMusic, deadSong;
+let dinoImg, dino_inde_image, longBoneImg, shortBoneImg, mediumBoneImg, groundImg, dino_deadImg;
+let papyMusic, deadSong, indeSong;
 let playerHP = 100;
+let score;
+let attacks_given = 0;
+let level = 0;
+let difficulty;
+let hitsound;
+let flag
 
 function preload() {
   dinoImg = loadImage('Blue.png');
@@ -12,9 +18,13 @@ function preload() {
   mediumBoneImg = loadImage('attack_medium_bone.png');
   groundImg = loadImage('background.png');
   dino_deadImg = loadImage('Blue_Dead.png')
+  dino_inde_image = loadImage('Orange.png')
 
   papyMusic = loadSound('papyMus.mp3');
   deadSong = loadSound('DeadSong.mp3');
+  indeSong = loadSound('nationalAnthem.mp3');
+
+  hitsound = loadSound('hitsound.wav');
 }
 
 function setup() {
@@ -23,7 +33,10 @@ function setup() {
   ground = new Ground();
 
   papyMusic.play();
+  papyMusic.setVolume(0.5);
   papyMusic.loop();
+
+  score = 0
 }
 
 function draw() {
@@ -32,18 +45,63 @@ function draw() {
   dino.update();
   dino.display();
 
-  
-
+  score = score + Math.round(frameCount/60);
 
   ground.display();
+
+  console.log(attacks_given);
 
   textSize(20);
   fill(255);
   text(`Player HP: ${playerHP}`, 20, 30);
 
-  if (frameCount % 50 === 0) {
-    let randomAttack = Math.floor(random(3));
-    attacks.push(new Attack(randomAttack));
+  textSize(20);
+  fill(255);
+  text(`Score: ${score}`, 680, 30);
+
+  textSize(20);
+  fill(255);
+  text(`Difficulty: ${difficulty}`, 320, 30);
+
+  if(level === 0) {
+    if (frameCount % 50 === 0) {
+      let randomAttack = Math.floor(random(3));
+      attacks.push(new Attack(randomAttack));
+      attacks_given += 1
+      difficulty = 'Easiest'
+    }
+  }
+  else if (level === 1) {
+    if (frameCount % 40 === 0) {
+      let randomAttack = Math.floor(random(3));
+      attacks.push(new Attack(randomAttack));
+      attacks_given += 1
+      difficulty = 'Easy'
+    }
+  }
+  else if (level === 2) {
+    if (frameCount % 30 === 0) {
+      let randomAttack = Math.floor(random(3));
+      attacks.push(new Attack(randomAttack));
+      attacks_given += 1
+      difficulty = 'Medium'
+    }
+  }
+  else if (level === 3) {
+    if (frameCount % 20 === 0) {
+      let randomAttack = Math.floor(random(3));
+      attacks.push(new Attack(randomAttack));
+      attacks_given += 1
+      difficulty = 'Hard'
+    }
+  }
+  else if (level === 4) {
+    if (frameCount % 10 === 0) {
+      let randomAttack = Math.floor(random(3));
+      attacks.push(new Attack(randomAttack));
+      attacks_given += 1
+      difficulty = 'IMPOSSIBLE (GODIENERD)'
+    }
   }
 
   for (let attack of attacks) {
@@ -53,9 +111,22 @@ function draw() {
     if (dino.hits(attack)) {
       playerHP -= 10;
       attacks.splice(attacks.indexOf(attack), 1);
+      hitsound.play()
     }
   }
 
+  if(attacks_given === 100) {
+    level = 1
+  }
+  else if(attacks_given === 200) {
+    level = 2
+  }
+  else if(attacks_given === 300) {
+    level = 3
+  }
+  else if(attacks_given === 500) {
+    level = 4
+  }
   if(playerHP === 0) {
     gameOver();
   }
@@ -69,6 +140,11 @@ function keyPressed() {
   }
 }
 
+function independenceDay() {
+  dino.independeceDay();
+  papyMusic.stop();
+}
+
 function gameOver() {
   background(0);
   fill(255);
@@ -76,11 +152,17 @@ function gameOver() {
   textAlign(CENTER, CENTER);
   text("You Died", width / 2, height / 2);
   noLoop();
+  textSize(20);
+  textAlign(CENTER, CENTER);
+  text("Your Score: " + score, width / 4, height / 2);
+  textSize(20);
+  textAlign(CENTER, CENTER);
+  text("Last Difficulty: " + difficulty, width * 4, height / 2);
+  noLoop();
   papyMusic.stop();
   deadSong.play();
   deadSong.loop();
 }
-
 class Dino {
   constructor() {
     this.x = 50;
@@ -97,6 +179,15 @@ class Dino {
     if (this.isOnGround()) {
       this.velocity = -20;
     }
+  }
+
+  independeceDay() {
+    image(dino_inde_image, this.x - 25, this.y - 25, 50, 50);
+    indeSong.play()
+    setTimeout(() => {
+      image(dinoImg, this.x - 25, this.y - 25, 50, 50);
+      papyMusic.play()
+    }, "61000");
   }
 
   update() {
@@ -126,6 +217,7 @@ class Attack {
     this.size = 40;
     this.speed = 30;
     this.attackType = attackType;
+    this.lifetime = 50
   }
 
   display() {
