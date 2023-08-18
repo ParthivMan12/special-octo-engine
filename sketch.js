@@ -9,7 +9,7 @@ let attacks_given = 0;
 let level = 0;
 let difficulty;
 let hitsound;
-let flag
+
 
 function preload() {
   dinoImg = loadImage('Blue.png');
@@ -19,6 +19,8 @@ function preload() {
   groundImg = loadImage('background.png');
   dino_deadImg = loadImage('Blue_Dead.png')
   dino_inde_image = loadImage('Orange.png')
+
+  savedHighScore = loadStrings('data/highscores.txt');
 
   papyMusic = loadSound('papyMus.mp3');
   deadSong = loadSound('DeadSong.mp3');
@@ -157,11 +159,13 @@ function gameOver() {
   text("Your Score: " + score, width / 4, height / 2);
   textSize(20);
   textAlign(CENTER, CENTER);
-  text("Last Difficulty: " + difficulty, width * 4, height / 2);
+  text("Last Difficulty: " + difficulty, width / 2, height / 4);
   noLoop();
   papyMusic.stop();
   deadSong.play();
   deadSong.loop();
+  
+
 }
 class Dino {
   constructor() {
