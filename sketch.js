@@ -2,14 +2,16 @@ let dino;
 let attacks = [];
 let ground;
 let dinoImg, dino_inde_image, longBoneImg, shortBoneImg, mediumBoneImg, groundImg, dino_deadImg;
-let papyMusic, deadSong, indeSong;
-let playerHP = 100;
+let papyMusic, deadSong, indeSong, nggyuSong, sannessTheme;
+let playerHP = 200;
 let score;
 let attacks_given = 0;
 let level = 0;
-let difficulty;
+let difficulty = 'Easiest';
 let hitsound;
-
+let sans, sans_image, sans_atk, sans_next, sanness, gameTitle_image;
+let buttonbegin, buttonbegin_image;
+let buttontry, buttontry_image;
 
 function preload() {
   dinoImg = loadImage('Blue.png');
@@ -19,14 +21,20 @@ function preload() {
   groundImg = loadImage('background.png');
   dino_deadImg = loadImage('Blue_Dead.png')
   dino_inde_image = loadImage('Orange.png')
-
-  savedHighScore = loadStrings('data/highscores.txt');
-
+  gameTitle_image = loadImage('game_title.png')
+  
+  sannessTheme = loadSound('sannessThene.mp3')
   papyMusic = loadSound('papyMus.mp3');
   deadSong = loadSound('DeadSong.mp3');
   indeSong = loadSound('nationalAnthem.mp3');
+  nggyuSong = loadSound('neverGonna.mp3')
 
   hitsound = loadSound('hitsound.wav');
+
+  sans_image = loadImage('sans_normal.png');
+  sans_atk = loadImage('sans_eye_blue.png');
+  sans_next = loadImage('sans_hellifiknow.png')
+  sanness = loadImage('SANES.png')
 }
 
 function setup() {
@@ -34,106 +42,166 @@ function setup() {
   dino = new Dino();
   ground = new Ground();
 
+  sans = createSprite(400, 150)
+  sans.addImage(sans_image)
+
   papyMusic.play();
   papyMusic.setVolume(0.5);
   papyMusic.loop();
 
-  score = 0
+  sannessTheme.play()
+  sannessTheme.setVolume(0);
+  sannessTheme.loop()
+  score = 0;
+  
 }
 
 function draw() {
-  background(240);
+  background(0);
+
+  drawSprites();
 
   dino.update();
   dino.display();
 
-  score = score + Math.round(frameCount/60);
+  score += 1;
 
   ground.display();
 
   console.log(attacks_given);
 
   textSize(20);
-  fill(255);
-  text(`Player HP: ${playerHP}`, 20, 30);
+    fill(255);
+    text(`Player HP: ${playerHP}`, 20, 30);
 
-  textSize(20);
-  fill(255);
-  text(`Score: ${score}`, 680, 30);
+    textSize(20);
+    fill(255);
+    text(`Score: ${score}`, 680, 30);
 
-  textSize(20);
-  fill(255);
-  text(`Difficulty: ${difficulty}`, 320, 30);
+    textSize(20);
+    fill(255);
+    text(`Difficulty: ${difficulty}`, 320, 30);
 
-  if(level === 0) {
-    if (frameCount % 50 === 0) {
-      let randomAttack = Math.floor(random(3));
-      attacks.push(new Attack(randomAttack));
-      attacks_given += 1
-      difficulty = 'Easiest'
+    if(level === 0) {
+      if (frameCount % 50 === 0) {
+        let randomAttack = Math.floor(random(3));
+        sans.addImage(sans_atk)
+        attacks.push(new Attack(randomAttack));
+        attacks_given += 1
+        setTimeout(() => {
+          sans.addImage(sans_image)
+        }, "1000");
+        difficulty = 'Easiest'
+      }
     }
-  }
-  else if (level === 1) {
-    if (frameCount % 40 === 0) {
-      let randomAttack = Math.floor(random(3));
-      attacks.push(new Attack(randomAttack));
-      attacks_given += 1
-      difficulty = 'Easy'
+    else if (level === 1) {
+      if (frameCount % 40 === 0) {
+        let randomAttack = Math.floor(random(3));
+        sans.addImage(sans_atk)
+        attacks.push(new Attack(randomAttack));
+        attacks_given += 1
+        setTimeout(() => {
+          sans.addImage(sans_image)
+        }, "800")
+        difficulty = 'Easy'
+      }
     }
-  }
-  else if (level === 2) {
-    if (frameCount % 30 === 0) {
-      let randomAttack = Math.floor(random(3));
-      attacks.push(new Attack(randomAttack));
-      attacks_given += 1
-      difficulty = 'Medium'
+    else if (level === 2) {
+      if (frameCount % 30 === 0) {
+        let randomAttack = Math.floor(random(3));
+        sans.addImage(sans_atk)
+        attacks.push(new Attack(randomAttack));
+        attacks_given += 1
+        setTimeout(() => {
+          sans.addImage(sans_image)
+        }, "600")
+        difficulty = 'Medium'
+      }
     }
-  }
-  else if (level === 3) {
-    if (frameCount % 20 === 0) {
-      let randomAttack = Math.floor(random(3));
-      attacks.push(new Attack(randomAttack));
-      attacks_given += 1
-      difficulty = 'Hard'
+    else if (level === 3) {
+      if (frameCount % 20 === 0) {
+        let randomAttack = Math.floor(random(3));
+        sans.addImage(sans_atk)
+        attacks.push(new Attack(randomAttack));
+        attacks_given += 1
+        setTimeout(() => {
+          sans.addImage(sans_image)
+        }, "400")
+        difficulty = 'Hard'
+      }
     }
-  }
-  else if (level === 4) {
-    if (frameCount % 10 === 0) {
-      let randomAttack = Math.floor(random(3));
-      attacks.push(new Attack(randomAttack));
-      attacks_given += 1
-      difficulty = 'IMPOSSIBLE (GODIENERD)'
+    else if (level === 4) {
+      if (frameCount % 10 === 0) {
+        let randomAttack = Math.floor(random(3));
+        sans.addImage(sanness)
+        attacks.push(new Attack(randomAttack));
+        attacks_given += 1
+        difficulty = 'Hardest'
+      }
     }
-  }
+    else if (level === 5) {
+      if (frameCount % 5 === 0) {
+        let randomAttack = Math.floor(random(3));
+        sans.addImage(sanness)
+        attacks.push(new Attack(randomAttack));
+        attacks_given += 1
+        difficulty = 'IMPOSIBBLE (GODIENERD)'
+      }
+    }
 
-  for (let attack of attacks) {
-    attack.update();
-    attack.display();
+    for (let attack of attacks) {
+      attack.update();
+      attack.display();
 
-    if (dino.hits(attack)) {
-      playerHP -= 10;
-      attacks.splice(attacks.indexOf(attack), 1);
-      hitsound.play()
+      if (dino.hits(attack)) {
+        playerHP -= 10;
+        attacks.splice(attacks.indexOf(attack), 1);
+        hitsound.play()
+      }
     }
-  }
 
-  if(attacks_given === 100) {
-    level = 1
-  }
-  else if(attacks_given === 200) {
-    level = 2
-  }
-  else if(attacks_given === 300) {
-    level = 3
-  }
-  else if(attacks_given === 500) {
-    level = 4
-  }
-  if(playerHP === 0) {
-    gameOver();
-  }
+    if(attacks_given === 50) {
+      level = 1
+      sans.addImage(sans_next)
+      setTimeout(() => {
+        sans.addImage(sans_image)
+      }, "1000")
+    }
+    else if(attacks_given === 100) {
+      level = 2
+      sans.addImage(sans_next)
+      setTimeout(() => {
+        sans.addImage(sans_image)
+      }, "1000")
+    }
+    else if(attacks_given === 150) {
+      level = 3
+      sans.addImage(sans_next)
+      setTimeout(() => {
+        sans.addImage(sans_image)
+      }, "1000")
+    }
+    else if(attacks_given === 200) {
+      level = 4
+      sans.addImage(sans_next)
+      setTimeout(() => {
+        sans.addImage(sanness)
+      }, "1000")
+      papyMusic.stop()
+      sannessTheme.setVolume(1)
+    }
+    else if(attacks_given === 400) {
+      level = 5
+      sans.addImage(sans_next)
+      setTimeout(() => {
+        sans.addImage(sanness)
+      }, "1000")
+    }
+    if(playerHP === 0) {
+      gameOver();
+    }
 
-  attacks = attacks.filter(attack => !attack.isOffscreen());
+    attacks = attacks.filter(attack => !attack.isOffscreen());
 }
 
 function keyPressed() {
@@ -145,6 +213,10 @@ function keyPressed() {
 function independenceDay() {
   dino.independeceDay();
   papyMusic.stop();
+}
+
+function stopAttacks() {
+  attacks = []
 }
 
 function gameOver() {
@@ -161,12 +233,19 @@ function gameOver() {
   textAlign(CENTER, CENTER);
   text("Last Difficulty: " + difficulty, width / 2, height / 4);
   noLoop();
+  sannessTheme.stop();
   papyMusic.stop();
-  deadSong.play();
-  deadSong.loop();
-  
-
+  let randomSong = Math.round(random(2))
+  console.log(randomSong)
+  if(randomSong === 2) {
+    nggyuSong.play()
+  }
+  if(randomSong < 2) {
+    deadSong.play();
+    deadSong.loop();
+  }
 }
+
 class Dino {
   constructor() {
     this.x = 50;
