@@ -2,7 +2,7 @@ let dino;
 let attacks = [];
 let ground;
 let dinoImg, dino_inde_image, longBoneImg, shortBoneImg, mediumBoneImg, groundImg, dino_deadImg;
-let papyMusic, deadSong, indeSong, nggyuSong, sannessTheme;
+let papyMusic, deadSong, indeSong, nggyuSong, sannessTheme, hardIntro;
 let playerHP = 200;
 let score;
 let attacks_given = 0;
@@ -12,6 +12,7 @@ let hitsound;
 let sans, sans_image, sans_atk, sans_next, sanness, gameTitle_image;
 let buttonbegin, buttonbegin_image;
 let buttontry, buttontry_image;
+let sannessOnStage, hardcoreMode;
 
 function preload() {
   dinoImg = loadImage('Blue.png');
@@ -28,6 +29,8 @@ function preload() {
   deadSong = loadSound('DeadSong.mp3');
   indeSong = loadSound('nationalAnthem.mp3');
   nggyuSong = loadSound('neverGonna.mp3')
+  hardIntro = loadSound('hardIntro.mp3');
+
 
   hitsound = loadSound('hitsound.wav');
 
@@ -54,6 +57,30 @@ function setup() {
   sannessTheme.loop()
   score = 0;
   
+}
+
+function hardcoreModeCMD(acivate) {
+  if(acivate === true) {
+    hardcoreMode = true;
+    if(sannessOnStage === true) {
+      sanness.setVolume(0.3)
+      hardIntro.play()
+      setTimeout(() => {
+        sanness.setVolume(1)
+      }, "8000")
+    }
+    else {
+      papyMusic.setVolume(0)
+      hardIntro.play()
+      setTimeout(() => {
+        papyMusic.setVolume(1)
+      }, "8000")
+    }
+    playerHP = 100
+  }
+  if(acivate === false) {
+    hardcoreMode = false;
+  }
 }
 
 function draw() {
@@ -83,69 +110,145 @@ function draw() {
     text(`Difficulty: ${difficulty}`, 320, 30);
 
     if(level === 0) {
-      if (frameCount % 50 === 0) {
-        let randomAttack = Math.floor(random(3));
-        sans.addImage(sans_atk)
-        attacks.push(new Attack(randomAttack));
-        attacks_given += 1
-        setTimeout(() => {
-          sans.addImage(sans_image)
-        }, "1000");
-        difficulty = 'Easiest'
+      if(hardcoreMode === true) {
+        if (frameCount % 40 === 0) {
+          let randomAttack = Math.floor(random(3));
+          sans.addImage(sans_atk)
+          attacks.push(new Attack(randomAttack));
+          attacks_given += 1
+          setTimeout(() => {
+            sans.addImage(sans_image)
+          }, "1000");
+          difficulty = 'Easiest...?'
+        }
+      }
+      else {
+        if (frameCount % 50 === 0) {
+          let randomAttack = Math.floor(random(3));
+          sans.addImage(sans_atk)
+          attacks.push(new Attack(randomAttack));
+          attacks_given += 1
+          setTimeout(() => {
+            sans.addImage(sans_image)
+          }, "1000");
+          difficulty = 'Easiest'
+        }
       }
     }
     else if (level === 1) {
-      if (frameCount % 40 === 0) {
-        let randomAttack = Math.floor(random(3));
-        sans.addImage(sans_atk)
-        attacks.push(new Attack(randomAttack));
-        attacks_given += 1
-        setTimeout(() => {
-          sans.addImage(sans_image)
-        }, "800")
-        difficulty = 'Easy'
-      }
+      if(hardcoreMode === true) {
+        if (frameCount % 30 === 0) {
+          let randomAttack = Math.floor(random(3));
+          sans.addImage(sans_atk)
+          attacks.push(new Attack(randomAttack));
+          attacks_given += 1
+          setTimeout(() => {
+            sans.addImage(sans_image)
+          }, "800")
+          difficulty = 'Not so Easy'
+        }
+      else {
+        if (frameCount % 40 === 0) {
+          let randomAttack = Math.floor(random(3));
+          sans.addImage(sans_atk)
+          attacks.push(new Attack(randomAttack));
+          attacks_given += 1
+          setTimeout(() => {
+            sans.addImage(sans_image)
+          }, "800")
+          difficulty = 'Easy'
+        }
+      } 
     }
     else if (level === 2) {
-      if (frameCount % 30 === 0) {
-        let randomAttack = Math.floor(random(3));
-        sans.addImage(sans_atk)
-        attacks.push(new Attack(randomAttack));
-        attacks_given += 1
-        setTimeout(() => {
-          sans.addImage(sans_image)
-        }, "600")
-        difficulty = 'Medium'
+      if(hardcoreMode === true) {
+        if (frameCount % 20 === 0) {
+          let randomAttack = Math.floor(random(3));
+          sans.addImage(sans_atk)
+          attacks.push(new Attack(randomAttack));
+          attacks_given += 1
+          setTimeout(() => {
+            sans.addImage(sans_image)
+          }, "600")
+          difficulty = 'Cannot find difficulty: Medium'
+        }
+      }
+      else {
+        if (frameCount % 30 === 0) {
+          let randomAttack = Math.floor(random(3));
+          sans.addImage(sans_atk)
+          attacks.push(new Attack(randomAttack));
+          attacks_given += 1
+          setTimeout(() => {
+            sans.addImage(sans_image)
+          }, "600")
+          difficulty = 'Medium'
+        }
       }
     }
     else if (level === 3) {
-      if (frameCount % 20 === 0) {
-        let randomAttack = Math.floor(random(3));
-        sans.addImage(sans_atk)
-        attacks.push(new Attack(randomAttack));
-        attacks_given += 1
-        setTimeout(() => {
-          sans.addImage(sans_image)
-        }, "400")
-        difficulty = 'Hard'
+      if(hardcoreMode === true) {
+        if (frameCount % 10 === 0) {
+          let randomAttack = Math.floor(random(3));
+          sans.addImage(sans_atk)
+          attacks.push(new Attack(randomAttack));
+          attacks_given += 1
+          setTimeout(() => {
+            sans.addImage(sans_image)
+          }, "400")
+          difficulty = 'Hardcore'
+        }
+      }
+      else {
+        if (frameCount % 20 === 0) {
+          let randomAttack = Math.floor(random(3));
+          sans.addImage(sans_atk)
+          attacks.push(new Attack(randomAttack));
+          attacks_given += 1
+          setTimeout(() => {
+            sans.addImage(sans_image)
+          }, "400")
+          difficulty = 'Hard'
+        }
       }
     }
     else if (level === 4) {
-      if (frameCount % 10 === 0) {
-        let randomAttack = Math.floor(random(3));
-        sans.addImage(sanness)
-        attacks.push(new Attack(randomAttack));
-        attacks_given += 1
-        difficulty = 'Hardest'
+      if(hardcoreMode === true)
+        if (frameCount % 5 === 0) {
+          let randomAttack = Math.floor(random(3));
+          sans.addImage(sanness)
+          attacks.push(new Attack(randomAttack));
+          attacks_given += 1
+          difficulty = 'Impossiblecore'
+        }
+      }
+      else {
+        if (frameCount % 10 === 0) {
+          let randomAttack = Math.floor(random(3));
+          sans.addImage(sanness)
+          attacks.push(new Attack(randomAttack));
+          attacks_given += 1
+          difficulty = 'Hardest'
+        }
       }
     }
     else if (level === 5) {
-      if (frameCount % 5 === 0) {
-        let randomAttack = Math.floor(random(3));
-        sans.addImage(sanness)
-        attacks.push(new Attack(randomAttack));
-        attacks_given += 1
-        difficulty = 'IMPOSIBBLE (GODIENERD)'
+      if(hardcoreMode === true)
+        if (frameCount % 2 === 0) {
+          let randomAttack = Math.floor(random(3));
+          sans.addImage(sanness)
+          attacks.push(new Attack(randomAttack));
+          attacks_given += 1
+          difficulty = 'Error: Cannot find difficulty'
+        }
+      }
+      else {
+        if (frameCount % 5 === 0) {
+          let randomAttack = Math.floor(random(3));
+          sans.addImage(sanness)
+          attacks.push(new Attack(randomAttack));
+          attacks_given += 1
+          difficulty = 'IMPOSSIBLE (GODIENERD)'
       }
     }
 
@@ -188,6 +291,7 @@ function draw() {
         sans.addImage(sanness)
       }, "1000")
       papyMusic.stop()
+      sannessOnStage = true
       sannessTheme.setVolume(1)
     }
     else if(attacks_given === 400) {
@@ -235,12 +339,10 @@ function gameOver() {
   noLoop();
   sannessTheme.stop();
   papyMusic.stop();
-  let randomSong = Math.round(random(2))
-  console.log(randomSong)
-  if(randomSong === 2) {
+  if(sannessOnStage == true) {
     nggyuSong.play()
   }
-  if(randomSong < 2) {
+  else {
     deadSong.play();
     deadSong.loop();
   }
