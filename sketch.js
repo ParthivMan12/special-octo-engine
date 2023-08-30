@@ -12,7 +12,7 @@ let hitsound;
 let sans, sans_image, sans_atk, sans_next, sanness, gameTitle_image;
 let buttonbegin, buttonbegin_image;
 let buttontry, buttontry_image;
-let sannessOnStage, hardcoreMode;
+let sannessOnStage, lastPlayerHP;
 
 function preload() {
   dinoImg = loadImage('Blue.png');
@@ -59,30 +59,6 @@ function setup() {
   
 }
 
-function hardcoreModeCMD(acivate) {
-  if(acivate === true) {
-    hardcoreMode = true;
-    if(sannessOnStage === true) {
-      sanness.setVolume(0.3)
-      hardIntro.play()
-      setTimeout(() => {
-        sanness.setVolume(1)
-      }, "8000")
-    }
-    else {
-      papyMusic.setVolume(0)
-      hardIntro.play()
-      setTimeout(() => {
-        papyMusic.setVolume(1)
-      }, "8000")
-    }
-    playerHP = 100
-  }
-  if(acivate === false) {
-    hardcoreMode = false;
-  }
-}
-
 function draw() {
   background(0);
 
@@ -92,6 +68,8 @@ function draw() {
   dino.display();
 
   score += 1;
+
+  lastPlayerHP = playerHP;
 
   ground.display();
 
@@ -110,145 +88,68 @@ function draw() {
     text(`Difficulty: ${difficulty}`, 320, 30);
 
     if(level === 0) {
-      if(hardcoreMode === true) {
-        if (frameCount % 40 === 0) {
-          let randomAttack = Math.floor(random(3));
-          sans.addImage(sans_atk)
-          attacks.push(new Attack(randomAttack));
-          attacks_given += 1
-          setTimeout(() => {
-            sans.addImage(sans_image)
-          }, "1000");
-          difficulty = 'Easiest...?'
-        }
-      }
-      else {
-        if (frameCount % 50 === 0) {
-          let randomAttack = Math.floor(random(3));
-          sans.addImage(sans_atk)
-          attacks.push(new Attack(randomAttack));
-          attacks_given += 1
-          setTimeout(() => {
-            sans.addImage(sans_image)
-          }, "1000");
-          difficulty = 'Easiest'
-        }
+      if (frameCount % 50 === 0) {
+        let randomAttack = Math.floor(random(3));
+        sans.addImage(sans_atk)
+        attacks.push(new Attack(randomAttack));
+        attacks_given += 1
+        setTimeout(() => {
+          sans.addImage(sans_image)
+        }, "1000");
+        difficulty = 'Easiest'
       }
     }
     else if (level === 1) {
-      if(hardcoreMode === true) {
-        if (frameCount % 30 === 0) {
-          let randomAttack = Math.floor(random(3));
-          sans.addImage(sans_atk)
-          attacks.push(new Attack(randomAttack));
-          attacks_given += 1
-          setTimeout(() => {
-            sans.addImage(sans_image)
-          }, "800")
-          difficulty = 'Not so Easy'
-        }
-      else {
-        if (frameCount % 40 === 0) {
-          let randomAttack = Math.floor(random(3));
-          sans.addImage(sans_atk)
-          attacks.push(new Attack(randomAttack));
-          attacks_given += 1
-          setTimeout(() => {
-            sans.addImage(sans_image)
-          }, "800")
-          difficulty = 'Easy'
-        }
+      if (frameCount % 40 === 0) {
+        let randomAttack = Math.floor(random(3));
+        sans.addImage(sans_atk)
+        attacks.push(new Attack(randomAttack));
+        attacks_given += 1
+        setTimeout(() => {
+          sans.addImage(sans_image)
+        }, "800")
+        difficulty = 'Easy'
       } 
     }
     else if (level === 2) {
-      if(hardcoreMode === true) {
-        if (frameCount % 20 === 0) {
-          let randomAttack = Math.floor(random(3));
-          sans.addImage(sans_atk)
-          attacks.push(new Attack(randomAttack));
-          attacks_given += 1
-          setTimeout(() => {
-            sans.addImage(sans_image)
-          }, "600")
-          difficulty = 'Cannot find difficulty: Medium'
-        }
-      }
-      else {
-        if (frameCount % 30 === 0) {
-          let randomAttack = Math.floor(random(3));
-          sans.addImage(sans_atk)
-          attacks.push(new Attack(randomAttack));
-          attacks_given += 1
-          setTimeout(() => {
-            sans.addImage(sans_image)
-          }, "600")
-          difficulty = 'Medium'
-        }
+      if (frameCount % 30 === 0) {
+        let randomAttack = Math.floor(random(3));
+        sans.addImage(sans_atk)
+        attacks.push(new Attack(randomAttack));
+        attacks_given += 1
+        setTimeout(() => {
+          sans.addImage(sans_image)
+        }, "600")
+        difficulty = 'Medium'
       }
     }
     else if (level === 3) {
-      if(hardcoreMode === true) {
-        if (frameCount % 10 === 0) {
-          let randomAttack = Math.floor(random(3));
-          sans.addImage(sans_atk)
-          attacks.push(new Attack(randomAttack));
-          attacks_given += 1
-          setTimeout(() => {
-            sans.addImage(sans_image)
-          }, "400")
-          difficulty = 'Hardcore'
-        }
-      }
-      else {
-        if (frameCount % 20 === 0) {
-          let randomAttack = Math.floor(random(3));
-          sans.addImage(sans_atk)
-          attacks.push(new Attack(randomAttack));
-          attacks_given += 1
-          setTimeout(() => {
-            sans.addImage(sans_image)
-          }, "400")
-          difficulty = 'Hard'
-        }
+      if (frameCount % 20 === 0) {
+        let randomAttack = Math.floor(random(3));
+        sans.addImage(sans_atk)
+        attacks.push(new Attack(randomAttack));
+        attacks_given += 1
+        setTimeout(() => {
+          sans.addImage(sans_image)
+        }, "400")
+        difficulty = 'Hard'
       }
     }
     else if (level === 4) {
-      if(hardcoreMode === true)
-        if (frameCount % 5 === 0) {
-          let randomAttack = Math.floor(random(3));
-          sans.addImage(sanness)
-          attacks.push(new Attack(randomAttack));
-          attacks_given += 1
-          difficulty = 'Impossiblecore'
-        }
+      if (frameCount % 10 === 0) {
+        let randomAttack = Math.floor(random(3));
+        sans.addImage(sanness)
+        attacks.push(new Attack(randomAttack));
+        attacks_given += 1
+        difficulty = 'Hardest'
       }
-      else {
-        if (frameCount % 10 === 0) {
-          let randomAttack = Math.floor(random(3));
-          sans.addImage(sanness)
-          attacks.push(new Attack(randomAttack));
-          attacks_given += 1
-          difficulty = 'Hardest'
-        }
-      }
-    }
+
     else if (level === 5) {
-      if(hardcoreMode === true)
-        if (frameCount % 2 === 0) {
-          let randomAttack = Math.floor(random(3));
-          sans.addImage(sanness)
-          attacks.push(new Attack(randomAttack));
-          attacks_given += 1
-          difficulty = 'Error: Cannot find difficulty'
-        }
-      }
-      else {
-        if (frameCount % 5 === 0) {
-          let randomAttack = Math.floor(random(3));
-          sans.addImage(sanness)
-          attacks.push(new Attack(randomAttack));
-          attacks_given += 1
-          difficulty = 'IMPOSSIBLE (GODIENERD)'
+        let randomAttack = Math.floor(random(3));
+        sans.addImage(sanness)
+        attacks.push(new Attack(randomAttack));
+        attacks_given += 1
+        difficulty = 'IMPOSSIBLE (GODIENERD)'
       }
     }
 
