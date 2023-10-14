@@ -13,6 +13,7 @@ let sans, sans_image, sans_atk, sans_next, sanness, gameTitle_image;
 let buttonbegin, buttonbegin_image;
 let buttontry, buttontry_image;
 let sannessOnStage, lastPlayerHP;
+let currentSong;
 
 function preload() {
   dinoImg = loadImage('Blue.png');
@@ -30,7 +31,7 @@ function preload() {
   indeSong = loadSound('nationalAnthem.mp3');
   nggyuSong = loadSound('neverGonna.mp3')
   hardIntro = loadSound('hardIntro.mp3');
-
+  metrikSong = loadSound('Hi739.mp3')
 
   hitsound = loadSound('hitsound.wav');
 
@@ -48,15 +49,35 @@ function setup() {
   sans = createSprite(width / 2, height / 3)
   sans.addImage(sans_image)
 
-  papyMusic.play();
-  papyMusic.setVolume(0.5);
-  papyMusic.loop();
+  currentSong = papyMusic;
+  currentSong.setVolume(0.5);
+  currentSong.play();
+  currentSong.loop();
+}
 
-  sannessTheme.play()
-  sannessTheme.setVolume(0);
-  sannessTheme.loop()
-  score = 0;
-  
+function changeMusic(newMusic) {
+  if (newMusic === " ") {
+    console.log("Music types")
+    console.log("Deltarune - Megaloviana KEYCODE = DELTA")
+    console.log("Metrik - HI - KEYCODE = HI")
+  }
+  if (newMusic == 'DELTA') {
+    console.log('Activated music DELTA')
+    currentSong.stop();
+    currentSong = papyMusic;
+    currentSong.play();
+  }
+
+  if(newMusic == 'HI') {
+    console.log('Activated music HI')
+    currentSong.stop();
+    currentSong = metrikSong;
+    currentSong.play();
+  }
+}
+
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight);
 }
 
 function draw() {
@@ -67,17 +88,15 @@ function draw() {
   dino.update();
   dino.display();
 
-  score += 1;
+  score = Math.round(frameCount/60);
 
   lastPlayerHP = playerHP;
 
   ground.display();
 
-  console.log(attacks_given);
-
   textSize(20);
     fill(255);
-    text(`Player HP: ${playerHP}`, width / 40, height / 20);
+    text(`Player HP: ${playerHP}`, width / 70, height / 20);
 
     textSize(20);
     fill(255);
@@ -85,7 +104,7 @@ function draw() {
 
     textSize(20);
     fill(255);
-    text(`Difficulty: ${difficulty}`, width / 1.2, height / 20);
+    text(`Difficulty: ${difficulty}`, width / 1.3, height / 20);
 
     if(level === 0) {
       if (frameCount % 50 === 0) {
@@ -191,9 +210,7 @@ function draw() {
       setTimeout(() => {
         sans.addImage(sanness)
       }, "1000")
-      papyMusic.stop()
       sannessOnStage = true
-      sannessTheme.setVolume(1)
     }
     else if(attacks_given === 400) {
       level = 5
