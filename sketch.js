@@ -41,11 +41,11 @@ function preload() {
 }
 
 function setup() {
-  createCanvas(800, 400);
+  createCanvas(windowWidth, windowHeight);
   dino = new Dino();
   ground = new Ground();
 
-  sans = createSprite(400, 150)
+  sans = createSprite(width / 2, height / 3)
   sans.addImage(sans_image)
 
   papyMusic.play();
@@ -77,15 +77,15 @@ function draw() {
 
   textSize(20);
     fill(255);
-    text(`Player HP: ${playerHP}`, 20, 30);
+    text(`Player HP: ${playerHP}`, width / 40, height / 20);
 
     textSize(20);
     fill(255);
-    text(`Score: ${score}`, 680, 30);
+    text(`Score: ${score}`, width / 2.15, height / 20);
 
     textSize(20);
     fill(255);
-    text(`Difficulty: ${difficulty}`, 320, 30);
+    text(`Difficulty: ${difficulty}`, width / 1.2, height / 20);
 
     if(level === 0) {
       if (frameCount % 50 === 0) {
@@ -265,15 +265,6 @@ class Dino {
     if (this.isOnGround()) {
       this.velocity = -20;
     }
-  }
-
-  independeceDay() {
-    image(dino_inde_image, this.x - 25, this.y - 25, 50, 50);
-    indeSong.play()
-    setTimeout(() => {
-      image(dinoImg, this.x - 25, this.y - 25, 50, 50);
-      papyMusic.play()
-    }, "61000");
   }
 
   update() {
