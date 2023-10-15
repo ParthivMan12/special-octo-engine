@@ -8,6 +8,7 @@ let score;
 let attacks_given = 0;
 let level = 0;
 let difficulty = 'Easiest';
+let gamestate = 0
 let hitsound;
 let sans, sans_image, sans_atk, sans_next, sanness, gameTitle_image;
 let buttonbegin, buttonbegin_image;
@@ -85,16 +86,17 @@ function draw() {
 
   drawSprites();
 
-  dino.update();
-  dino.display();
+  if(gamestate = 1) {
+    dino.update();
+    dino.display();
 
-  score = Math.round(frameCount/60);
+    score = Math.round(frameCount);
 
-  lastPlayerHP = playerHP;
+    lastPlayerHP = playerHP;
 
-  ground.display();
+    ground.display();
 
-  textSize(20);
+    textSize(20);
     fill(255);
     text(`Player HP: ${playerHP}`, width / 70, height / 20);
 
@@ -162,8 +164,9 @@ function draw() {
         attacks_given += 1
         difficulty = 'Hardest'
       }
-
+    }
     else if (level === 5) {
+      if(frameCount % 5 === 0) {
         let randomAttack = Math.floor(random(3));
         sans.addImage(sanness)
         attacks.push(new Attack(randomAttack));
@@ -180,8 +183,8 @@ function draw() {
         playerHP -= 10;
         attacks.splice(attacks.indexOf(attack), 1);
         hitsound.play()
+        }
       }
-    }
 
     if(attacks_given === 50) {
       level = 1
@@ -222,9 +225,10 @@ function draw() {
     if(playerHP === 0) {
       gameOver();
     }
-
+      
     attacks = attacks.filter(attack => !attack.isOffscreen());
-}
+  }
+};
 
 function keyPressed() {
   if (keyCode === UP_ARROW && dino.isOnGround()) {
