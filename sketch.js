@@ -61,12 +61,22 @@ function changeMusic(newMusic) {
     console.log("Music types")
     console.log("Deltarune - Megaloviana KEYCODE = DELTA")
     console.log("Metrik - HI - KEYCODE = HI")
+    console.log("Sanness - Pain - KEYCODE = SANES")
+    console.log('Wait, why are you here?')
+    console.log('Fuck off.')
   }
   if (newMusic == 'DELTA') {
     console.log('Activated music DELTA')
     currentSong.stop();
     currentSong = papyMusic;
     currentSong.play();
+  }
+
+  if (newMusic == 'SANES') {
+    console.log('Activated music SANES')
+    currentSong.stop()
+    currentSong = sannessTheme;
+    currentSong.play()
   }
 
   if(newMusic == 'HI') {
@@ -160,6 +170,7 @@ function draw() {
       if (frameCount % 10 === 0) {
         let randomAttack = Math.floor(random(3));
         sans.addImage(sanness)
+        changeMusic('SANES')
         attacks.push(new Attack(randomAttack));
         attacks_given += 1
         difficulty = 'Hardest'
